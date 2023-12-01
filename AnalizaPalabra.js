@@ -10,16 +10,26 @@ let esEsdrujulaa = false; // Variable para controlar si la palabra es esdrújula
 function analizarPalabra(palabra) {
   const encontradas = [];
   const todasLasVocales = ['a', 'e', 'i', 'o', 'u', 'á', 'é', 'í', 'ó', 'ú'];
+  let contadorAcentuadas = 0; // Contador para las vocales acentuadas
 
   for (let i = 0; i < palabra.length; i++) {
     const letra = palabra[i];
     if (todasLasVocales.includes(letra)) {
       encontradas.push(letra);
+      if (letra === 'á' || letra === 'é' || letra === 'í' || letra === 'ó' || letra === 'ú') {
+        contadorAcentuadas++;
+      }
     }
+  }
+
+  if (contadorAcentuadas > 1) {
+    console.log(`La palabra está mal escrita, tiene más de una vocal acentuada.`);
+    return false; // Indica que la palabra está mal escrita
   }
 
   return encontradas;
 }
+
 
 function esEsdrujula(vocalesEncontradas) {
   if (vocalesEncontradas.length >= 3) {
@@ -28,7 +38,9 @@ function esEsdrujula(vocalesEncontradas) {
     
     if (acentuadas.includes(antepenultimaVocal)) {
       console.log(`La palabra es esdrújula y lleva tilde.`);
-      esEsdrújula = true; // Marca la palabra como esdrújula
+        
+     /////////////ay que validar esto    
+      pedirEntrada(); 
     } else {
       console.log(`La palabra no es esdrújula.`);
     }
@@ -53,10 +65,10 @@ function esSobreesdrujula(vocalesEncontradas) {
 }
 
 function esAguda(vocalesEncontradas, palabra) {
-  if (esEsdrújulaa=== true && vocalesEncontradas.length >= 1) { // Verifica si no es esdrújula
+  if (vocalesEncontradas.length >= 1) {
     const ultimaVocal = vocalesEncontradas[vocalesEncontradas.length - 1];
     const acentuadas = ['á', 'é', 'í', 'ó', 'ú'];
-    const letrasFinales = ['n', 's','a','e','i','o','u'];
+    const letrasFinales = ['n', 's', 'a', 'e', 'i', 'o', 'u'];
 
     if (acentuadas.includes(ultimaVocal) || letrasFinales.includes(palabra[palabra.length - 1])) {
       console.log(`La palabra es aguda y lleva tilde.`);
@@ -68,18 +80,25 @@ function esAguda(vocalesEncontradas, palabra) {
   }
 }
 
+
+
 function procesarEntrada(palabra) {
   if (palabra === 'EXIT') {
     console.log('Saliendo del programa...');
     rl.close();
   } else {
     const encontradas = analizarPalabra(palabra);
-    esEsdrujula(encontradas);
-    esSobreesdrujula(encontradas);
-    esAguda(encontradas, palabra); // Agregar verificación de aguda
-    pedirEntrada();
+    if (encontradas !== false) {
+      esEsdrujula(encontradas);
+      esSobreesdrujula(encontradas);
+      esAguda(encontradas, palabra);
+    } else {
+      console.log(`La palabra está mal escrita, tiene más de una vocal acentuada.`);
+    }
+    pedirEntrada(); // Pedir una nueva palabra independientemente del resultado
   }
 }
+
 
 function pedirEntrada() {
   rl.question('Ingresa una palabra (escribe EXIT para salir): ', (input) => {
