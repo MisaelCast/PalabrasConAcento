@@ -153,7 +153,7 @@ function procesarEntrada(palabra) {
 // Función para solicitar la entrada de palabras al usuario
 function pedirEntrada() {
   rl.question('Ingresa una palabra (escribe EXIT para salir): ', (input) => {
-    procesarEntrada(input.toLowerCase()); // Procesa la entrada en minúsculas
+    procesarEntrada(input); // Procesa la entrada en minúsculas
   });
 }
 
